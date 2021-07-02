@@ -51,7 +51,7 @@ To confirm that an access token will be accepted upon enforcement of multi-facto
 
 Let’s say for example, that at this point a user has granted consent for your application via both **ads.manage** and **msads.manage** scopes. They may have granted consent via **ads.manage** last month and then granted consent via **msads.manage** this month. 
 
-If you refresh the token with **ads.manage** the response will include the **ads.manage** scope. 
+If you refresh the token with **ads.manage** the response will include the **ads.manage** scope. Upon enforcement of multi-factor authentication, "MyAccessToken-1" will not be accepted.
 
 ```json
 {
@@ -59,12 +59,12 @@ If you refresh the token with **ads.manage** the response will include the **ads
     "scope":"https://ads.microsoft.com/ads.manage",
     "expires_in":3600,
     "ext_expires_in":3600,
-    "access_token":"MyAccessToken",
-    "refresh_token":"MyRefreshToken"
+    "access_token":"MyAccessToken-1",
+    "refresh_token":"MyRefreshToken-1"
 }
 ```
 
-If you refresh the token with **msads.manage** the response will include both **ads.manage** and **msads.manage** scopes. 
+If you refresh the token with **msads.manage** the response will include both **ads.manage** and **msads.manage** scopes. Upon enforcement of multi-factor authentication, "MyAccessToken-2" will be accepted.
 
 ```json
 {
@@ -72,12 +72,12 @@ If you refresh the token with **msads.manage** the response will include both **
     "scope":"https://ads.microsoft.com/msads.manage https://ads.microsoft.com/ads.manage",
     "expires_in":3600,
     "ext_expires_in":3600,
-    "access_token":"MyAccessToken",
-    "refresh_token":"MyRefreshToken"
+    "access_token":"MyAccessToken-2",
+    "refresh_token":"MyRefreshToken-2"
 }
 ```
 
-An **invalid_grant** error could be returned if you attempt to refresh the token using a scope that the user does not consent to.  
+An **invalid_grant** error could be returned if you attempt to refresh the token using any scope where the user does not provide consent.  
 
 ```json
 {
