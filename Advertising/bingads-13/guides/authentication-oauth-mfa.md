@@ -40,6 +40,51 @@ Upon enforcement of MFA, we will only authenticate access tokens on behalf of a 
 
 - Prior to MFA enforcement the Live Connect endpoint supports the ```bingads.manage``` scope. The **Live Connect** endpoint is already deprecated and will no longer be supported. Access tokens that you acquire for users via the ```bingads.manage``` scope will no longer be accepted.
 
+## Why can I get a new access token by refreshing with a different scope?
+
+An access token represents permissions by a user to act on their behalf with limited permissions based on scopes. When you request consent to manage their accounts you set the scope parameter to either **ads.manage** and **msads.manage**. You are really asking for a user access token that has permissions for whatever is defined by the scope.
+
+> [!IMPORTANT]
+> Upon enforcement of multi-factor authentication, an access token will only be accepted if it was received or refreshed via the **msads.manage** scope. You can continue refreshing the tokens via **ads.manage**, but the Bing Ads API will not accept them. 
+
+To confirm that an access token will be accepted upon enforcement of multi-factor authentication, you can check the response scope. If the scope includes **msads.manage** then it will be accepted, unless it has expired per usual authorization code grant flow e.g., after 60 minutes.
+
+Let’s say for example, that at this point a user has granted consent for your application via both **ads.manage** and **msads.manage** scopes. They may have granted consent via **ads.manage** last month and then granted consent via **msads.manage** this month. 
+
+If you refresh the token with **ads.manage** the response will include the **ads.manage** scope. 
+
+```json
+{
+    "token_type":"Bearer",
+    "scope":"https://ads.microsoft.com/ads.manage",
+    "expires_in":3600,
+    "ext_expires_in":3600,
+    "access_token":"MyAccessToken",
+    "refresh_token":"MyRefreshToken"
+}
+```
+
+If you refresh the token with **msads.manage** the response will include both **ads.manage** and **msads.manage** scopes. 
+
+```json
+{
+    "token_type":"Bearer",
+    "scope":"https://ads.microsoft.com/msads.manage https://ads.microsoft.com/ads.manage",
+    "expires_in":3600,
+    "ext_expires_in":3600,
+    "access_token":"MyAccessToken",
+    "refresh_token":"MyRefreshToken"
+}
+```
+
+An **invalid_grant** error could be returned if you attempt to refresh the token using a scope that the user does not consent to.  
+
+```json
+{
+    "error":"invalid_grant",
+    "error_description":"AADSTS70000: The request was denied because one or more scopes requested are unauthorized or expired. The user must first sign in and grant the client application access to the requested scope."
+}
+```
 
 ## SDK support 
 
