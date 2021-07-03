@@ -40,7 +40,41 @@ Upon enforcement of MFA, we will only authenticate access tokens on behalf of a 
 
 - Prior to MFA enforcement the Live Connect endpoint supports the ```bingads.manage``` scope. The **Live Connect** endpoint is already deprecated and will no longer be supported. Access tokens that you acquire for users via the ```bingads.manage``` scope will no longer be accepted.
 
-## Why can I get a new access token by refreshing with a different scope?
+## SDK support 
+
+Support for the new  ```msads.manage scope ``` is available starting with version 13.0.10 of  Bing Ads SDKs (.NET, Java, Python, and PHP).  
+
+The new  ```msads.manage ``` scope is used by default. For backwards compatibility, until the enforcement date you can use the ```ads.manage ``` or  ```bingads.manage ``` scopes with a short workaround.  
+
+```csharp
+var oAuthDesktopMobileAuthCodeGrant = new OAuthDesktopMobileAuthCodeGrant(
+    Settings.Default["ClientId"].ToString(),
+    apiEnvironment,
+    OAuthScope.ADS_MANAGE // temporary workaround; remove or use MSADS_MANAGE instead
+);
+```
+```java
+OAuthDesktopMobileAuthCodeGrant oAuthDesktopMobileAuthCodeGrant = new OAuthDesktopMobileAuthCodeGrant(
+    ClientId, 
+    ApiEnvironment,
+    OAuthScope.ADS_MANAGE // temporary workaround; remove or use MSADS_MANAGE instead
+);
+```
+```php
+$authentication = (new OAuthDesktopMobileAuthCodeGrant())
+    ->withClientId(ClientId)
+    ->withEnvironment(ApiEnvironment)
+    ->withOAuthScope(OAuthScope::ADS_MANAGE); // temporary workaround; remove or use MSADS_MANAGE instead
+```
+```python
+oauth_web_auth_code_grant = OAuthDesktopMobileAuthCodeGrant(
+    client_id=CLIENT_ID,
+    env=ENVIRONMENT,
+    oauth_scope="ads.manage" # temporary workaround; remove or use "msads.manage" instead
+)
+```
+
+## Example scenario: Get a new access token by refreshing with a different scope
 
 An access token represents permissions by a user to act on their behalf with limited permissions based on scopes. When you request consent to manage their accounts you set the scope parameter to either **ads.manage** and **msads.manage**. You are really asking for a user access token that has permissions for whatever is defined by the scope.
 
@@ -84,40 +118,6 @@ An **invalid_grant** error could be returned if you attempt to refresh the token
     "error":"invalid_grant",
     "error_description":"AADSTS70000: The request was denied because one or more scopes requested are unauthorized or expired. The user must first sign in and grant the client application access to the requested scope."
 }
-```
-
-## SDK support 
-
-Support for the new  ```msads.manage scope ``` is available starting with version 13.0.10 of  Bing Ads SDKs (.NET, Java, Python, and PHP).  
-
-The new  ```msads.manage ``` scope is used by default. For backwards compatibility, until the enforcement date you can use the ```ads.manage ``` or  ```bingads.manage ``` scopes with a short workaround.  
-
-```csharp
-var oAuthDesktopMobileAuthCodeGrant = new OAuthDesktopMobileAuthCodeGrant(
-    Settings.Default["ClientId"].ToString(),
-    apiEnvironment,
-    OAuthScope.ADS_MANAGE // temporary workaround; remove or use MSADS_MANAGE instead
-);
-```
-```java
-OAuthDesktopMobileAuthCodeGrant oAuthDesktopMobileAuthCodeGrant = new OAuthDesktopMobileAuthCodeGrant(
-    ClientId, 
-    ApiEnvironment,
-    OAuthScope.ADS_MANAGE // temporary workaround; remove or use MSADS_MANAGE instead
-);
-```
-```php
-$authentication = (new OAuthDesktopMobileAuthCodeGrant())
-    ->withClientId(ClientId)
-    ->withEnvironment(ApiEnvironment)
-    ->withOAuthScope(OAuthScope::ADS_MANAGE); // temporary workaround; remove or use MSADS_MANAGE instead
-```
-```python
-oauth_web_auth_code_grant = OAuthDesktopMobileAuthCodeGrant(
-    client_id=CLIENT_ID,
-    env=ENVIRONMENT,
-    oauth_scope="ads.manage" # temporary workaround; remove or use "msads.manage" instead
-)
 ```
 
 ## See Also
