@@ -87,9 +87,9 @@ An access token represents permissions by a user to act on their behalf with lim
 
 To confirm that an access token will be accepted upon enforcement of multi-factor authentication, you can check the response scope. If the scope includes **msads.manage** then it will be accepted, unless it has expired per usual authorization code grant flow e.g., after 60 minutes.
 
-Let’s say for example, that at this point a user has granted consent for your application via both **ads.manage** and **msads.manage** scopes. They may have granted consent via **ads.manage** last month and then granted consent via **msads.manage** this month. 
+Let’s say for example, that at this point a user has granted consent for your application via both **ads.manage** and **msads.manage** scopes. They may have granted consent via **ads.manage** last month and then granted consent via **msads.manage** this month.
 
-If you refresh the token with **ads.manage** the response will include the **ads.manage** scope. Upon enforcement of multi-factor authentication, "MyAccessToken-1" will not be accepted.
+If you refresh the token with **ads.manage** the response will include the **ads.manage** scope. Upon enforcement of multi-factor authentication, "MyAccessToken-1" would not be accepted.
 
 ```json
 {
@@ -102,7 +102,7 @@ If you refresh the token with **ads.manage** the response will include the **ads
 }
 ```
 
-If you refresh the token with **msads.manage** the response will include both **ads.manage** and **msads.manage** scopes. Upon enforcement of multi-factor authentication, "MyAccessToken-2" will be accepted.
+If you refresh the token with **msads.manage** the response will include both **ads.manage** and **msads.manage** scopes. Upon enforcement of multi-factor authentication, "MyAccessToken-2" would be accepted.
 
 ```json
 {
@@ -115,7 +115,7 @@ If you refresh the token with **msads.manage** the response will include both **
 }
 ```
 
-An **invalid_grant** error could be returned if you attempt to refresh the token using any scope where the user does not provide consent.  
+An **invalid_grant** error could be returned if you attempt to refresh the token using any scope where the user does not currently provide consent.  
 
 ```json
 {
