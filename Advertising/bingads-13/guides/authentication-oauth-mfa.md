@@ -74,7 +74,11 @@ oauth_web_auth_code_grant = OAuthDesktopMobileAuthCodeGrant(
 )
 ```
 
-## Example scenario: Get a new access token by refreshing with a different scope
+## Example scenarios
+
+Here are example scenarios that might apply to your business. 
+
+### Example: Get a new access token by refreshing with a different scope
 
 An access token represents permissions by a user to act on their behalf with limited permissions based on scopes. When you request consent to manage their accounts you set the scope parameter to either **ads.manage** and **msads.manage**. You are really asking for a user access token that has permissions for whatever is defined by the scope.
 
