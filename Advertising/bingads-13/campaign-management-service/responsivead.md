@@ -4,18 +4,15 @@ ms.service: bing-ads-campaign-management-service
 ms.topic: article
 author: eric-urban
 ms.author: eur
-description: A responsive ad format for Audience ads in the Microsoft Audience Network.
+description: A responsive ad format for audience ads and multimedia ads.
 ---
 # ResponsiveAd Data Object - Campaign Management
-A responsive ad format for Audience ads in the Microsoft Audience Network.
+A responsive ad format for audience ads and multimedia ads.
 
-Responsive ads automatically adjust to accommodate the sizes and shapes of audience ad formats. These ads work best with informative text rather than calls to action.
-
-> [!NOTE]
-> This feature is currently available in the United States, Canada, the United Kingdom, and Australia. If you advertise in the United States, Canada, the United Kingdom, or Australia and want to opt in to audience ads, [contact support](https://go.microsoft.com/fwlink?LinkId=398371). 
+The ResponsiveAd object is used for both [Multimedia ads](https://help.ads.microsoft.com/#apex/ads/en/60107/0) in the search network and [Audience ads](https://help.ads.microsoft.com/#apex/ads/en/56674/0) in the Microsoft Audience Network. See the [remarks](#remarks) section below for details about the key differentiators.
 
 > [!NOTE]
-> Duplicate responsive ads are allowed in the same ad group. 
+> Duplicate responsive ads are allowed in the same ad group.
 
 ## Syntax
 ```xml
@@ -104,7 +101,37 @@ The [ResponsiveAd](responsivead.md) object derives from the [Ad](ad.md) object, 
 |<a name="urlcustomparameters"></a>UrlCustomParameters|Your custom collection of key and value parameters for URL tracking.<br/><br/>Microsoft Advertising will accept the first 8 [CustomParameter](customparameter.md) objects that you include within the [CustomParameters](customparameters.md) object, and if you include more than 8 custom parameters an error will be returned. Each [CustomParameter](customparameter.md) includes [Key](customparameter.md#key) and [Value](customparameter.md#value) elements.<br/><br/>**Add:** Optional<br/>**Update:** Optional. If no value is set for the update, this setting is not changed. Set the [UrlCustomParameters](#urlcustomparameters) element to null or empty to retain any existing custom parameters. To remove all custom parameters, set the [Parameters](customparameters.md#parameters) element of the [CustomParameters](customparameters.md) object to null or empty. To remove a subset of custom parameters, specify the custom parameters that you want to keep in the [Parameters](customparameters.md#parameters) element of the [CustomParameters](customparameters.md) object.|[CustomParameters](customparameters.md)|
 
 ## <a name="remarks"></a>Remarks
-Because audience ads are responsive, you can create multiple image assets with different sizes and aspect ratios so they can flexibly display across a variety of publishers and placements. In the [Images](#images) element include one or more [AssetLink](assetlink.md) objects that each contain an [ImageAsset](imageasset.md) with [SubType](imageasset.md#subtype) set to one of the string values in the table below.
+
+The ResponsiveAd object is used for [Multimedia ads](https://help.ads.microsoft.com/#apex/ads/en/60107/0) in the search network and [Audience ads](https://help.ads.microsoft.com/#apex/ads/en/56674/0) in the Microsoft Audience Network. 
+
+Most supported properties are the same, but here are some of the key differentiators.
+
+- For multimedia ads you'll set [CallToAction](#calltoaction), [CallToActionLanguage](#calltoactionlanguage), [Descriptions](#descriptions), [Headline](#headline), [Headlines](#headlines), and [Images](#images).
+- For audience ads you'll set [Headline](#headline), [Images](#images), [ImpressionTrackingUrls](#impressiontrackingurls), [LongHeadline](#longheadline), and [Text](#text).
+
+> [!NOTE]
+> The data for [Images](#images) are provisioned via the [AddMedia](addmedia.md) operation. You can use the GIF, JPEG, or PNG MIME types. Images with animation are not supported. Although you can only add media with a few aspect ratios via the [AddMedia](addmedia.md) operation, you can use [ImageAsset](imageasset.md) crop settings to determine the effective aspect ratio in the context of each responsive ad [AssetLink](assetlink.md). The aspect ratio of the stored image would be unchanged in the account level media library.
+>
+> The maximum file size is 5 MB. The maximum width and height in pixels are 2592 and 2048 independently, and you must still maintain one of the supported aspect ratios. For example if the image asset with sub type LandscapeImageMedia is 2592 in width, then the height must be 1357.
+
+### Multimedia ad images
+
+For multimedia ads you'll create multiple image assets with different sizes and aspect ratios. You need to add at least 1 image with 1.91:1 aspect ratio and 1 image with 1:1 aspect ratio. 
+
+In the [Images](#images) element include one or more [AssetLink](assetlink.md) objects. Each asset link contains an [ImageAsset](imageasset.md) with [SubType](imageasset.md#subtype) set to one of the string values in the table below.
+
+|Sub Type|Minimum dimensions in pixels|
+|--------|--------|--------|
+|Image191x100|703 width x 368 height<br/>Aspect radio 1.91:1|
+|Image4x1|512 width x 128 height<br/>Aspect radio 4:1|
+|Image1x1|128 width x 128 height<br/>Aspect radio 1:1|
+|Image1x2|128 width x 256 height<br/>Aspect radio 1:2|
+
+### Audience ad images
+
+For audience ads you'll create multiple image assets with different sizes, aspect ratios, and crop settings so they can flexibly display across a variety of publishers and placements. 
+
+In the [Images](#images) element include one or more [AssetLink](assetlink.md) objects. Each asset link contains an [ImageAsset](imageasset.md) with [SubType](imageasset.md#subtype) set to one of the string values in the table below.
 
 |Sub Type|Minimum dimensions in pixels|
 |--------|--------|--------|
@@ -117,11 +144,6 @@ Because audience ads are responsive, you can create multiple image assets with d
 |ImageMedia133X100|100 width x 75 height<br/>Aspect radio 1.33:1|
 |ImageMedia178X100|624 width x 350 height<br/>Aspect radio 1.78:1|
 |ImageMedia172X100|300 width x 174 height<br/>Aspect radio 1.72:1|
-
-> [!NOTE]
-> Media for responsive ads are provisioned via the [Image](image.md) object using the [AddMedia](addmedia.md) operation. You can use the GIF, JPEG, or PNG MIME types. Images with animation are not supported. Although you can only add media with a few aspect ratios via the [AddMedia](addmedia.md) operation, you can use [ImageAsset](imageasset.md) crop settings to determine the effective aspect ratio in the context of each responsive ad [AssetLink](assetlink.md). The aspect ratio of the stored image would be unchanged in the account level media library.
-> 
-> The maximum file size is 5 MB. The maximum width and height in pixels are 2592 and 2048 independently, and you must still maintain one of the supported aspect ratios. For example if the image asset with sub type LandscapeImageMedia is 2592 in width, then the height must be 1357.
 
 You are only required to provide a landscape image asset. In the [Images](#images) element include an [AssetLink](assetlink.md) that contains one [ImageAsset](imageasset.md) with [SubType](imageasset.md#subtype) set to LandscapeImageMedia. The recommended dimensions for the LandscapeImageMedia are 1200 width x 628 height. Optionally you can include additional asset links, i.e., one image asset for each supported sub type. For any image asset sub types that you do not explicitly set, Microsoft Advertising will automatically create image asset links by cropping the LandscapeImageMedia. 
 
