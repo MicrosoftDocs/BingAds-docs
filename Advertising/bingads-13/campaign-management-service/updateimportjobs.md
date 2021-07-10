@@ -14,7 +14,9 @@ dev_langs:
 # UpdateImportJobs Service Operation - Campaign Management
 Replaces the specified import jobs with new import jobs.
 
-The current import settings are looked up by the identifer of each [import job](#importjobs). The operation only updates the properties that you explicitly set. If the operation is successful, new import job IDs are returned. 
+The current import settings are looked up by the identifer of each [import job](#importjobs). The operation only updates the properties that you explicitly set. If the operation is successful, new import job IDs are returned.
+
+You can still use the IDs that were replaced (deleted) to [get results](getimportresults.md) for previous import jobs.
 
 ## <a name="request"></a>Request Elements
 The *UpdateImportJobsRequest* object defines the [body](#request-body) and [header](#request-header) elements of the service operation request. The elements must be in the same order as shown in the [Request SOAP](#request-soap). 
